@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "mapin.com.ai.voipapp"
+        minSdkVersion 26
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.navigation:navigation-fragment:2.3.2'
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation files('../lib/ice4j-debug.aar')
+    implementation files('../lib/jsip-debug.aar')
+
+    //size
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
+    //Butterknife
+    implementation 'com.jakewharton:butterknife:8.0.1'
+
+    //PTT Libraries
+    implementation group: 'org.webrtc', name: 'google-webrtc', version: '1.0.28262'
+    implementation 'apache-log4j:log4j:1.2.15'
+
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.65'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
+    implementation 'org.bouncycastle:bcpg-jdk15on:1.65'
+    implementation 'org.bouncycastle:bctls-jdk15on:1.65'
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.arcao:slf4j-timber:3.1@aar'
+
+    implementation 'org.slf4j:jul-to-slf4j:1.7.26'
+
+    implementation 'org.conscrypt:conscrypt-android:2.4.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="ui_Positive_Green">#00a94f</color>
+    <color name="ui_Orange">#f5821e</color>
+    <color name="ui_Yellow">#ffc20e</color>
+    <color name="ui_BLUE">#0079c1</color>
+    <color name="ui_YELLOW_01">#daba18</color>
+    <color name="ui_RED_01">#C61D23</color>
+    <color name="ui_RED_03">#F37021</color>
+    <color name="ui_BLUE_01">#21409A</color>
+    <color name="ui_BLUE_03">#0095DA</color>
+    <color name="ui_PURPLE_01">#542785</color>
+    <color name="ui_PURPLE_03">#AC1380</color>
+    <color name="ui_Oranges">#f58220</color>
+    <color name="ui_GREY">#616161</color>
+</resources>
