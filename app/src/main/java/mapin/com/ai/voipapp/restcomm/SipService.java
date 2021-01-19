@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import mapin.com.ai.voipapp.Constants;
 import mapin.com.ai.voipapp.R;
 import mapin.com.ai.voipapp.activity.PushToTalkActivity;
 
@@ -218,7 +219,7 @@ public class SipService extends Service {
     private void initMainSip() {
         String cacheDir = this.getApplicationContext().getCacheDir().getAbsolutePath();
         System.setProperty("org.restcomm.CustomSecurityManagerProvider.cacheDir", cacheDir);
-        mainSip = new MainSipListener(true, LoggedInUser_SharedPreference.getFreeswitchUser(this), LoggedInUser_SharedPreference.getFreeswitchPassword(this), LoggedInUser_SharedPreference.getFreeswitchDomain(this));
+        mainSip = new MainSipListener(true, "user", "password", "domain");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -248,15 +249,12 @@ public class SipService extends Service {
                 inconId = R.drawable.topbar_call_notification;
                 notificationTextId = R.string.incall_notif_paused;
                 break;
-            case VIDEO:
-                inconId = R.drawable.topbar_videocall_notification;
-                notificationTextId = R.string.incall_notif_video;
-                break;
             default:
                 throw new IllegalArgumentException("Unknown state " + state);
         }
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
+        BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
         String name = "";       //TODO get incoming call user name
         mIncallNotif = createInCallNotification(getApplicationContext(), mNotificationTitle, getString(notificationTextId), inconId, bm, name, mNotifContentIntent);
 
@@ -273,7 +271,7 @@ public class SipService extends Service {
 
         Bitmap bm = null;
         try {
-            bm = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon);
+            bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
         } catch (Exception e) {
         }
         mCustomNotif = createNotification(this, title, message, iconResourceID, 0, bm, notifContentIntent, isOngoingEvent,notifcationsPriority);
@@ -365,7 +363,7 @@ public class SipService extends Service {
 
         Bitmap bm = null;
         try {
-            bm = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon);
+            bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background);
         } catch (Exception e) {
         }
         mNotif = createNotification(this, mNotificationTitle, text, R.drawable.status_level, 0, bm, mNotifContentIntent, true,notifcationsPriority);
@@ -458,7 +456,6 @@ public class SipService extends Service {
 
     @Override
     public synchronized void onDestroy() {
-        AppRxBus.getInstance().publish(AppRxBus.Subject.SUBJECT_SIP_SERVICE_STARTED,false);
         super.onDestroy();
 
         if (Constants.EMULATOR_MODE_ENABLED) {

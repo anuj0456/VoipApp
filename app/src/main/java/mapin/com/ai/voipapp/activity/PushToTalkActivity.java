@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,23 +20,30 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import mapin.com.ai.voipapp.Application;
+import mapin.com.ai.voipapp.Constants;
 import mapin.com.ai.voipapp.R;
+import mapin.com.ai.voipapp.Utils;
 import mapin.com.ai.voipapp.restcomm.MainSipListener;
 import mapin.com.ai.voipapp.restcomm.SipEventsListener;
 import mapin.com.ai.voipapp.restcomm.SipService;
+import timber.log.Timber;
 
-public class PushToTalkActivity implements ServiceConnection {
+public class PushToTalkActivity extends AppCompatActivity implements ServiceConnection {
 
     private static final String TAG = PushToTalkActivity.class.getSimpleName();
 
@@ -77,12 +85,13 @@ public class PushToTalkActivity implements ServiceConnection {
     private Boolean useIce = true;
     private SipEventsListener listener;
 
-    private String groupCode, group, user, password;
+    private String groupCode;
+    private String group;
     private static PushToTalkActivity instance;
     private Constants.LINPHONE_STATE callState;
     private boolean openFromNotification;
 
-    private Context context = AirsideApp.getInstance().getApplicationContext();
+    private Context context = Application.getInstance().getApplicationContext();
 
     public static Context getMyApplicationContext() {
         return applicationContext;
@@ -106,11 +115,11 @@ public class PushToTalkActivity implements ServiceConnection {
 
         groupCode = getIntent().getStringExtra("groupCode");
         group = getIntent().getStringExtra("groupCode");
-        user = getIntent().getStringExtra("freeswitchUser");
-        password = getIntent().getStringExtra("freeswitchPassword");
+        String user = getIntent().getStringExtra("freeswitchUser");
+        String password = getIntent().getStringExtra("freeswitchPassword");
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(Utils.getGroupName(this, groupCode));
+        Objects.requireNonNull(getSupportActionBar()).setTitle(Utils.getGroupName(this, groupCode));
 
         applicationContext = getApplicationContext();
 
@@ -144,7 +153,7 @@ public class PushToTalkActivity implements ServiceConnection {
         listener = new SipEventsListener() {
             @Override
             public void onOutgoing() {
-                android.util.Log.v("SipEventsListener", "SipEventsListener : onOutgoing");
+                Timber.tag("SipEventsListener").v("SipEventsListener : onOutgoing");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -157,7 +166,7 @@ public class PushToTalkActivity implements ServiceConnection {
 
             @Override
             public void onConnected() {
-                android.util.Log.v("SipEventsListener", "SipEventsListener : onConnected");
+                Timber.tag("SipEventsListener").v("SipEventsListener : onConnected");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -173,7 +182,7 @@ public class PushToTalkActivity implements ServiceConnection {
 
             @Override
             public void onDisconnected() {
-                android.util.Log.v("SipEventsListener", "SipEventsListener : onDisconnected");
+                Timber.tag("SipEventsListener").v("SipEventsListener : onDisconnected");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -188,7 +197,7 @@ public class PushToTalkActivity implements ServiceConnection {
 
             @Override
             public void onCallFailed() {
-                android.util.Log.v("SipEventsListener", "SipEventsListener : onCallFailed");
+                Timber.tag("SipEventsListener").v("SipEventsListener : onCallFailed");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -211,7 +220,7 @@ public class PushToTalkActivity implements ServiceConnection {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.d(TAG, "onDestroy");
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
@@ -415,20 +424,20 @@ public class PushToTalkActivity implements ServiceConnection {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_go_chat, menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_go_chat, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_go_chat:
-                backToChat();
-                break;
-            default:
-                break;
-        }
+//        switch (item.getItemId()) {
+//            case R.id.action_go_chat:
+//                backToChat();
+//                break;
+//            default:
+//                break;
+//        }
 
         return true;
     }
@@ -469,18 +478,6 @@ public class PushToTalkActivity implements ServiceConnection {
             } else {
                 callStatusTextView.setText(statusCallEnd);
             }
-        }
-    }
-
-    private void backToChat() {
-        if(!openFromNotification)
-            super.onBackPressed();
-        else{
-            Intent intent = new Intent(this,BottomNavigationActivity.class);
-            //clear all other top activity, and push BottomNavigationActivity to top, not create new one for BottomNavigationActivity
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            this.finish();
         }
     }
 
@@ -544,47 +541,47 @@ public class PushToTalkActivity implements ServiceConnection {
     }
 
     private void sendStartCallRequest(final String groupCode){
-        Thread startCallTask = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String userSessionToken = LoggedInUser_SharedPreference.getUserSessionToken(context);
-                    String userId = LoggedInUser_SharedPreference.getUId(context);
-                    Call<ATEmptyRS> startCallReq = MyRetroInterceptor.create(context, GroupAPICalls.class).startGroupCallReq(userSessionToken,groupCode,userId);
-                    ATEmptyRS res = startCallReq.execute().body();
-                    if(res!=null && res.isSuccess())
-                        LogUtil.i(TAG,"Start Call Request Response OK");
-                    else
-                        LogUtil.i(TAG,"Start Call Request Response Fail");
-                }catch (Exception ex){
-                    LogUtil.e(TAG,ex.getMessage());
-                }
-
-            }
-        });
-        startCallTask.start();
+//        Thread startCallTask = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String userSessionToken = LoggedInUser_SharedPreference.getUserSessionToken(context);
+//                    String userId = LoggedInUser_SharedPreference.getUId(context);
+//                    Call<ATEmptyRS> startCallReq = MyRetroInterceptor.create(context, GroupAPICalls.class).startGroupCallReq(userSessionToken,groupCode,userId);
+//                    ATEmptyRS res = startCallReq.execute().body();
+//                    if(res!=null && res.isSuccess())
+//                        LogUtil.i(TAG,"Start Call Request Response OK");
+//                    else
+//                        LogUtil.i(TAG,"Start Call Request Response Fail");
+//                }catch (Exception ex){
+//                    LogUtil.e(TAG,ex.getMessage());
+//                }
+//
+//            }
+//        });
+//        startCallTask.start();
     }
 
     private void sendEndCallRequest(final String groupCode){
-        Thread endCallTask = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String userSessionToken = LoggedInUser_SharedPreference.getUserSessionToken(context);
-                    String userId = LoggedInUser_SharedPreference.getUId(context);
-                    Call<ATEmptyRS> endCallReq = MyRetroInterceptor.create(context, GroupAPICalls.class).endGroupCallReq(userSessionToken,groupCode,userId);
-                    ATEmptyRS res = endCallReq.execute().body();
-                    if(res!=null && res.isSuccess())
-                        LogUtil.i(TAG,"End Call Request Response OK");
-                    else
-                        LogUtil.i(TAG,"End Call Request Response Fail");
-                }catch (Exception ex){
-                    LogUtil.e(TAG,ex.getMessage());
-                }
-
-            }
-        });
-        endCallTask.start();
+//        Thread endCallTask = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String userSessionToken = LoggedInUser_SharedPreference.getUserSessionToken(context);
+//                    String userId = LoggedInUser_SharedPreference.getUId(context);
+//                    Call<ATEmptyRS> endCallReq = MyRetroInterceptor.create(context, GroupAPICalls.class).endGroupCallReq(userSessionToken,groupCode,userId);
+//                    ATEmptyRS res = endCallReq.execute().body();
+//                    if(res!=null && res.isSuccess())
+//                        LogUtil.i(TAG,"End Call Request Response OK");
+//                    else
+//                        LogUtil.i(TAG,"End Call Request Response Fail");
+//                }catch (Exception ex){
+//                    LogUtil.e(TAG,ex.getMessage());
+//                }
+//
+//            }
+//        });
+//        endCallTask.start();
     }
 
 }

@@ -13,9 +13,28 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
-        release {
+        debug{
+            shrinkResources false
             minifyEnabled false
+            debuggable true
+            // ASSERT = 7; ERROR = 6; WARN = 5; INFO = 4; DEBUG = 3; VERBOSE = 2;
+            buildConfigField 'Integer', 'LOG_LEVEL', '3'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'Boolean', 'EMULATOR_MODE_ENABLED', 'true'
+        }
+        release {
+            shrinkResources false
+            minifyEnabled false
+            debuggable true
+            // ASSERT = 7; ERROR = 6; WARN = 5; INFO = 4; DEBUG = 3; VERBOSE = 2;
+            buildConfigField 'Integer', 'LOG_LEVEL', '5'
+            buildConfigField 'Boolean', 'EMULATOR_MODE_ENABLED', 'false'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -34,6 +53,9 @@ dependencies {
 
     implementation files('../lib/ice4j-debug.aar')
     implementation files('../lib/jsip-debug.aar')
+
+    // MultiDex
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     //size
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
@@ -63,5 +85,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 
 }

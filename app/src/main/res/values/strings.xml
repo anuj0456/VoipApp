@@ -13,4 +13,17 @@
     <string name="enter_phone_number">Enter phone number</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="submit">Submit</string>
+
+    <string name="initializing">Initializing...</string>
+    <string name="activate_failed">Zoiper Activation Failed: {0}</string>
+    <string name="dialing">Dialing...</string>
+    <string name="call_failed">Call Failed</string>
+    <string name="call_end">Call End</string>
+    <string name="call_resuming">Call resuming</string>
+    <string name="call_connected">Call connected</string>
+    <string name="call_active">Call active</string>
+    <string name="force_hangup_previous_call">Hangup previous call to {0}</string>
+
+    <string name="incall_notif_active">Audio call ongoing</string>
+    <string name="incall_notif_paused">Paused call ongoing</string>
 </resources>
