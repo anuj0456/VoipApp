@@ -1,3 +1,3 @@
-# VoIP #
+# VoIP Android App #
 
-This is an android project of complete PTT series.
+This is an android part of complete PTT series.
