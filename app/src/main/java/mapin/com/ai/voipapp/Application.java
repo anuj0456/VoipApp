@@ -23,16 +23,14 @@ public class Application extends MultiDexApplication {
     }
 
     public void startSipService(){
-        if(Utils.isPushToTalkEnable()){
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    startService(new Intent(Intent.ACTION_MAIN).setClass(this, SipService.class));
-                } else {
-                    //startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
-                }
-            }catch (Exception e){
-                Log.i("PTT Exception", "Service not initialised");
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                startService(new Intent(Intent.ACTION_MAIN).setClass(this, SipService.class));
+            } else {
+                //startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
             }
+        }catch (Exception e){
+            Log.i("PTT Exception", "Service not initialised");
         }
     }
 

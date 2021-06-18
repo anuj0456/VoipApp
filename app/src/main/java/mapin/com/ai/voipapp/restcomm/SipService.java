@@ -219,7 +219,7 @@ public class SipService extends Service {
     private void initMainSip() {
         String cacheDir = this.getApplicationContext().getCacheDir().getAbsolutePath();
         System.setProperty("org.restcomm.CustomSecurityManagerProvider.cacheDir", cacheDir);
-        mainSip = new MainSipListener(true, "user", "password", "domain");
+        mainSip = new MainSipListener(true, "user", "password", "ws://192.168.1.21:8080");
         new Thread(new Runnable() {
             @Override
             public void run() {

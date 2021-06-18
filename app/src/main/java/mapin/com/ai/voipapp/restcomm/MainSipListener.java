@@ -83,7 +83,7 @@ public class MainSipListener implements SipListener, PropertyChangeListener, Tri
     //TODO get these from Build Configs
     private String sipDomain;
     private String websocketHostname;
-    private String websocketURL = "socket_url";
+    private String websocketURL = "";
     private String transport;
     private int sipPort = 443;
 

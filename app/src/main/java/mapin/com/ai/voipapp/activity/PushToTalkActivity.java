@@ -118,16 +118,15 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
         String user = getIntent().getStringExtra("freeswitchUser");
         String password = getIntent().getStringExtra("freeswitchPassword");
 
-        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(Utils.getGroupName(this, groupCode));
 
         applicationContext = getApplicationContext();
 
         // make sure the group code is prefixed by "*"
-        if (!group.startsWith("*"))
-        {
-            group = "*" + group;
-        }
+//        if (!group.startsWith("*"))
+//        {
+//            group = "*" + group;
+//        }
 
         initSipListener();
 
@@ -144,7 +143,7 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
             callState = Constants.LINPHONE_STATE.Start_Call;
         }
 
-        initUI();
+//        initUI();
 
         instance = this;
     }
@@ -159,7 +158,7 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
                     public void run() {
                         callState = Constants.LINPHONE_STATE.Dialing;
                         callStatusTextView.setText(statusDialing);
-                        updateCallOrHangupButton();
+//                        updateCallOrHangupButton();
                     }
                 });
             }
@@ -173,7 +172,7 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
                         callStatusTextView.setText(statusCallActive);
                         callState = Constants.LINPHONE_STATE.On_Call;
                         sendStartCallRequest(groupCode);
-                        updateCallOrHangupButton();
+//                        updateCallOrHangupButton();
                         startCallTimer();
                         enableClickableCallUI();
                     }
@@ -188,7 +187,7 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
                     public void run() {
                         callStatusTextView.setText(statusCallEnd);
                         callState = Constants.LINPHONE_STATE.End_Call;
-                        updateCallOrHangupButton();
+//                        updateCallOrHangupButton();
                         stopCallTimer();
                         enableClickableCallUI();
                     }
@@ -203,7 +202,7 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
                     public void run() {
                         callStatusTextView.setText(statusCallFailed);
                         callState = Constants.LINPHONE_STATE.End_Call;
-                        updateCallOrHangupButton();
+//                        updateCallOrHangupButton();
                         stopCallTimer();
                         enableClickableCallUI();
                     }
@@ -386,15 +385,15 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
         }
     }
 
-    private void updateCallOrHangupButton() {
-        if (callState == Constants.LINPHONE_STATE.On_Call || callState == Constants.LINPHONE_STATE.Dialing || callState == Constants.LINPHONE_STATE.Start_Call) {
-            callOrHangupButton.setImageResource(R.drawable.ic_call_end);
-            callOrHangupButton.setBackgroundResource(R.drawable.circular_call_end);
-        } else if(callState == Constants.LINPHONE_STATE.End_Call) {
-            callOrHangupButton.setImageResource(R.drawable.ic_call);
-            callOrHangupButton.setBackgroundResource(R.drawable.circular_call);
-        }
-    }
+//    private void updateCallOrHangupButton() {
+//        if (callState == Constants.LINPHONE_STATE.On_Call || callState == Constants.LINPHONE_STATE.Dialing || callState == Constants.LINPHONE_STATE.Start_Call) {
+//            callOrHangupButton.setImageResource(R.drawable.ic_call_end);
+//            callOrHangupButton.setBackgroundResource(R.drawable.circular_call_end);
+//        } else if(callState == Constants.LINPHONE_STATE.End_Call) {
+//            callOrHangupButton.setImageResource(R.drawable.ic_call);
+//            callOrHangupButton.setBackgroundResource(R.drawable.circular_call);
+//        }
+//    }
 
     @OnTouch(R.id.push_imageButton)
     public boolean onPushButtonClicked(View v, MotionEvent event) {
@@ -442,17 +441,17 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
         return true;
     }
 
-    private void initUI() {
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PushToTalkActivity.super.onBackPressed();
-            }
-        });
-
-        speakerEarpieceSwitchButton.setVisibility(View.GONE);
-    }
+//    private void initUI() {
+//        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PushToTalkActivity.super.onBackPressed();
+//            }
+//        });
+//
+//        speakerEarpieceSwitchButton.setVisibility(View.GONE);
+//    }
 
     private void enableClickableCallUI() {
         callOrHangupButton.setClickable(true);
@@ -465,20 +464,20 @@ public class PushToTalkActivity extends AppCompatActivity implements ServiceConn
     }
 
     private void refreshCallUI() {
-        updateCallOrHangupButton();
+//        updateCallOrHangupButton();
         updateCallStatusTextView();
     }
 
     private void updateCallStatusTextView() {
-        if (mainSip != null) {
-            if (callState == Constants.LINPHONE_STATE.Dialing || callState == Constants.LINPHONE_STATE.Start_Call) {
-                callStatusTextView.setText(statusDialing);
-            } else if (callState == Constants.LINPHONE_STATE.On_Call) {
-                callStatusTextView.setText(statusCallActive);
-            } else {
-                callStatusTextView.setText(statusCallEnd);
-            }
-        }
+//        if (mainSip != null) {
+//            if (callState == Constants.LINPHONE_STATE.Dialing || callState == Constants.LINPHONE_STATE.Start_Call) {
+//                callStatusTextView.setText(statusDialing);
+//            } else if (callState == Constants.LINPHONE_STATE.On_Call) {
+//                callStatusTextView.setText(statusCallActive);
+//            } else {
+//                callStatusTextView.setText(statusCallEnd);
+//            }
+//        }
     }
 
     // Handle android permissions needed for Marshmallow (API 23) devices or later
